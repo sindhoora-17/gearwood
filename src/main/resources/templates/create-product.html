@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Product</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <a class="back-link" th:href="@{/products}">← Back to Products</a>
+
+    <div class="card admin-form-card">
+
+        <h1>Create Product</h1>
+
+        <form method="post"
+              th:action="@{/admin/products/create}"
+              th:object="${product}">
+
+            <div class="admin-form-grid">
+
+                <div class="form-row">
+                    <label>Product Code</label>
+                    <input th:field="*{productCode}" type="text">
+                </div>
+
+                <div class="form-row">
+                    <label>Name</label>
+                    <input th:field="*{name}" type="text">
+                </div>
+
+                <div class="form-row">
+                    <label>Manufacturer</label>
+                    <select name="manufacturerId">
+                        <option value="">-- Select Manufacturer --</option>
+                        <option th:each="manufacturer : ${manufacturers}"
+                                th:text="${manufacturer.name}"
+                                th:value="${manufacturer.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Pieces</label>
+                    <input th:field="*{numberOfPieces}" type="number">
+                </div>
+
+                <div class="form-row">
+                    <label>Difficulty</label>
+                    <select th:field="*{difficulty}">
+                        <option value="">-- Select Difficulty --</option>
+                        <option th:each="difficulty : ${difficulties}"
+                                th:text="${difficulty}"
+                                th:value="${difficulty}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Category</label>
+                    <select th:field="*{category}">
+                        <option value="">-- Select Category --</option>
+                        <option th:each="category : ${categories}"
+                                th:text="${category}"
+                                th:value="${category}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Price</label>
+                    <input step="0.01" th:field="*{price}" type="number">
+                </div>
+
+                <div class="form-row">
+                    <label>Wholesale Cost</label>
+                    <input step="0.01" th:field="*{wholesaleCost}" type="number">
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <label>Short Description</label>
+                <input th:field="*{shortDescription}" type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Long Description</label>
+                <textarea th:field="*{longDescription}"></textarea>
+            </div>
+
+            <div class="form-row">
+                <label>Acquired Date</label>
+                <input name="acquiredDate"
+                       th:value="${product.acquiredDate != null ? #temporals.format(product.acquiredDate, 'yyyy-MM-dd') : ''}"
+                       type="date">
+            </div>
+
+            <button type="submit">
+                Create Product
+            </button>
+
+            <a class="cancel-link" th:href="@{/products}">Cancel</a>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

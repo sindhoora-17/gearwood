@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<nav class="navbar" th:fragment="navbar">
+
+    <div class="nav-left">
+        <a class="logo" th:href="@{/}">Gearwood</a>
+    </div>
+
+    <div class="nav-right">
+
+        <span class="welcome-text" sec:authorize="isAuthenticated()">
+            Welcome, <span th:text="${currentUser.firstName}"></span>
+        </span>
+
+        <a th:href="@{/}">Home</a>
+
+        <a th:href="@{/products}">Products</a>
+
+        <a th:href="@{/cart}">
+            🛒 Cart
+            <span class="cart-badge"
+                  th:if="${cartCount != null && cartCount > 0}"
+                  th:text="${cartCount}">
+            </span>
+        </a>
+
+        <span class="nav-links" sec:authorize="isAuthenticated()">
+            <a th:href="@{/account}">Account</a>
+        </span>
+
+        <div class="nav-links" sec:authorize="isAnonymous()">
+
+            <a th:href="@{/login}">Login</a>
+
+            <a th:href="@{/register}">Register</a>
+
+        </div>
+
+        <span sec:authorize="isAuthenticated()">
+            <form method="post"
+                  style="display:inline;"
+                  th:action="@{/logout}">
+                <button type="submit">Logout</button>
+            </form>
+        </span>
+
+    </div>
+
+</nav>
+
+</body>
+</html>

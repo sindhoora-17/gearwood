@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Products - Gearwood Puzzle Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <div class="products-header">
+        <h1>
+            Products
+            <span class="product-count" th:text="'(' + ${products.size()} + ')'"></span>
+        </h1>
+
+        <a class="btn"
+           th:href="@{/admin/products/create}"
+           th:if="${isAdmin}">
+            Add Product
+        </a>
+    </div>
+
+    <form class="card product-filter-form" method="get" th:action="@{/products}">
+
+        <input name="keyword"
+               placeholder="Search..."
+               th:value="${keyword}"
+               type="text">
+
+        <select name="category">
+            <option value="">All Categories</option>
+            <option th:each="category : ${categories}"
+                    th:selected="${category == selectedCategory}"
+                    th:text="${category}"
+                    th:value="${category}">
+            </option>
+        </select>
+
+        <select name="difficulty">
+            <option value="">All Difficulties</option>
+            <option th:each="difficulty : ${difficulties}"
+                    th:selected="${difficulty == selectedDifficulty}"
+                    th:text="${difficulty}"
+                    th:value="${difficulty}">
+            </option>
+        </select>
+
+        <input name="minPrice"
+               placeholder="Min Price"
+               step="0.01"
+               th:value="${minPrice}"
+               type="number">
+
+        <input name="maxPrice"
+               placeholder="Max Price"
+               step="0.01"
+               th:value="${maxPrice}"
+               type="number">
+
+        <button type="submit">Search</button>
+
+        <a class="clear-link" th:href="@{/products}">Clear</a>
+
+    </form>
+
+    <div class="card" th:if="${products.isEmpty()}">
+        <p>No products matched your search.</p>
+    </div>
+
+    <div class="product-grid">
+
+        <div class="card product-card" th:each="product : ${products}">
+
+            <a th:href="@{'/products/' + ${product.productCode}}">
+                <img th:src="@{'/images/product-images/' + ${product.productCode} + '-01.jpg'}"
+                     onerror="this.onerror=null; this.src='/images/product-images/default.jpg';"
+                     alt="Product image">
+
+                <h2 th:text="${product.name}"></h2>
+            </a>
+
+            <p th:if="${isAdmin}">
+                <span class="status-active" th:if="${product.active}">Active</span>
+                <span class="status-inactive" th:if="${!product.active}">Inactive</span>
+            </p>
+
+            <p th:text="${product.shortDescription}"></p>
+
+            <p><strong>Price:</strong> <span th:text="'$' + ${product.price}"></span></p>
+            <p><strong>Manufacturer:</strong> <span th:text="${product.manufacturer.name}"></span></p>
+            <p>
+                <strong>Category:</strong>
+                <span th:text="${product.category}"></span>
+                |
+                <strong>Difficulty:</strong>
+                <span th:text="${product.difficulty}"></span>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

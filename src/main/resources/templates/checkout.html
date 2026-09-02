@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <a class="back-link" th:href="@{/cart}">
+        ← Back to Cart
+    </a>
+
+    <h1>Checkout</h1>
+
+    <div class="card" th:if="${cartItems.isEmpty()}">
+        <p>Your cart is empty. Please add items before checkout.</p>
+        <a class="btn" th:href="@{/products}">Continue Shopping</a>
+    </div>
+
+    <div class="checkout-layout" th:if="${!cartItems.isEmpty()}">
+
+        <form class="card checkout-form"
+              method="post"
+              th:action="@{/checkout}"
+              th:object="${checkoutDto}">
+
+            <div class="error-banner" th:if="${error}">
+                <p th:text="${error}"></p>
+            </div>
+
+            <div class="error-banner" th:if="${#fields.hasAnyErrors()}">
+                <p>Please complete all required checkout fields.</p>
+            </div>
+
+            <h2>Shipping Information</h2>
+
+            <div class="form-row">
+                <label>Full Name</label>
+                <input placeholder="Enter full name"
+                       th:field="*{shippingName}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Address Line 1</label>
+                <input placeholder="Enter address"
+                       th:field="*{streetAddress}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Address Line 2</label>
+                <input placeholder="Apartment, suite, etc. (optional)"
+                       th:field="*{address2}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>City</label>
+                <input placeholder="City"
+                       th:field="*{city}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>State</label>
+                <input placeholder="State"
+                       th:field="*{state}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>ZIP</label>
+                <input placeholder="ZIP Code"
+                       th:field="*{zip}"
+                       type="text">
+            </div>
+
+            <h2>Payment Information</h2>
+
+            <div class="form-row">
+                <label>Cardholder Name</label>
+                <input placeholder="Name on card"
+                       th:field="*{cardholderName}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Card Number</label>
+                <input placeholder="Card number"
+                       th:field="*{cardNumber}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Expiration Month (MM)</label>
+                <input placeholder="MM"
+                       th:field="*{expirationMonth}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Expiration Year (YYYY)</label>
+                <input placeholder="YYYY"
+                       th:field="*{expirationYear}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>CVV</label>
+                <input placeholder="CVV"
+                       th:field="*{cvv}"
+                       type="password">
+            </div>
+
+            <button class="place-order-btn" type="submit">Place Order</button>
+
+        </form>
+
+        <div class="summary">
+
+            <h2>Order Summary</h2>
+
+            <h4>Items</h4>
+
+            <div class="summary-item" th:each="item : ${cartItems}">
+                <div>
+                    <span th:text="${item.product.name}"></span>
+                    <br>
+                    <small th:text="'(' + ${item.quantity} + ')'"></small>
+                </div>
+
+                <strong th:text="'$' + ${item.lineTotal}"></strong>
+            </div>
+
+            <hr>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span th:text="'$' + ${subtotal}"></span>
+            </div>
+
+            <div class="summary-row">
+                <span>Shipping</span>
+
+                <span th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) == 0}">
+          FREE
+        </span>
+
+                <span th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) > 0}"
+                      th:text="'$' + ${shipping}">
+        </span>
+            </div>
+
+            <div th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) == 0}">
+                <p class="shipping-note success-note">✓ You qualify for FREE shipping.</p>
+            </div>
+
+            <div th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) > 0}">
+                <p class="shipping-note">Free shipping on orders of $75.00 or more.</p>
+            </div>
+
+            <div class="summary-row">
+                <span>Tax</span>
+                <span th:text="'$' + ${tax}"></span>
+            </div>
+
+            <hr>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <span th:text="'$' + ${total}"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Account</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <h1>My Account</h1>
+
+    <div class="account-grid">
+
+        <div class="card">
+            <h2>Profile Information</h2>
+
+            <p><strong>First Name:</strong> <span th:text="${user.firstName}"></span></p>
+            <p><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+            <p><strong>Role:</strong> <span th:text="${user.role.name}"></span></p>
+        </div>
+
+        <div class="card">
+            <h2>Account Actions</h2>
+
+            <a class="btn" th:href="@{/account/edit}">Edit Profile</a>
+            <a class="btn" th:href="@{/account/change-password}">Change Password</a>
+            <a class="btn" th:href="@{/cart}">View Cart</a>
+            <a class="btn" th:href="@{/account/orders}">View Order History</a>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Order History</h2>
+
+        <div th:if="${orders.isEmpty()}">
+            <p>You have no orders yet.</p>
+        </div>
+
+        <div th:if="${!orders.isEmpty()}">
+
+            <div class="order-card" th:each="order : ${orders}">
+
+                <div>
+                    <p>
+                        <strong>Order #</strong>
+                        <span th:text="${order.orderNumber}"></span>
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span th:text="${order.status}"></span>
+                    </p>
+
+                    <a class="order-details-link"
+                       th:href="@{'/account/orders/' + ${order.orderNumber}}">
+                        View Details
+                    </a>
+                </div>
+
+                <div class="order-card-right">
+                    <p th:text="${order.orderDateTime.toLocalDate()}"></p>
+                    <strong th:text="'$' + ${order.totalAmount}"></strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gearwood Puzzle Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="page-container">
+    <p class="success" th:if="${param.logout}">
+        You have been logged out successfully.
+    </p>
+</div>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div>
+            <p class="section-label">HANDCRAFTED WOODEN PUZZLE STORE</p>
+
+            <h1>Beautiful puzzles built to challenge, display, and enjoy.</h1>
+
+            <p>
+                Discover mechanical builds, decorative pieces, and gift-worthy wooden puzzles designed
+                for curious minds and careful hands.
+            </p>
+
+            <div class="hero-buttons">
+                <a class="btn" th:href="@{/products}">All Puzzles</a>
+                <a class="btn" th:href="@{/products(difficulty='HARD')}">Hard Puzzles</a>
+                <a class="btn" th:href="@{/products(difficulty='MEDIUM')}">Medium Puzzles</a>
+                <a class="btn" th:href="@{/products(difficulty='EASY')}">Easy Puzzles</a>
+            </div>
+
+            <div class="hero-stats">
+                <div><strong>30</strong><br>Products</div>
+                <div><strong>7</strong><br>Categories</div>
+                <div><strong>3</strong><br>Difficulty Levels</div>
+            </div>
+        </div>
+
+        <div class="hero-panel">
+            <h3>Why Gearwood?</h3>
+            <ul>
+                <li>Precision-cut wooden puzzle designs</li>
+                <li>Difficulty levels for casual and expert builders</li>
+                <li>Great for gifts, display shelves, and collectors</li>
+                <li>Detailed product pages with multiple images</li>
+            </ul>
+        </div>
+
+    </div>
+
+</section>
+
+<div class="page-container">
+
+    <p class="section-label">SHOP BY CATEGORY</p>
+    <h2>Find the style that fits your interest</h2>
+
+    <div class="category-grid">
+
+        <div class="card">
+            <h3>Mechanical</h3>
+            <p>Moving parts, interlocking components, and satisfying assembly.</p>
+        </div>
+
+        <div class="card">
+            <h3>Historical</h3>
+            <p>Models inspired by classic structures, eras, and designs.</p>
+        </div>
+
+        <div class="card">
+            <h3>Nautical</h3>
+            <p>Ships, sea-inspired models, and maritime-themed builds.</p>
+        </div>
+
+        <div class="card">
+            <h3>Sci-Fi</h3>
+            <p>Futuristic forms and imaginative builds for puzzle fans.</p>
+        </div>
+
+        <div class="card">
+            <h3>Fantasy</h3>
+            <p>Magical themes, imaginative silhouettes, and display-worthy pieces.</p>
+        </div>
+
+        <div class="card">
+            <h3>Architecture</h3>
+            <p>Buildable structures and landmark-inspired puzzle models.</p>
+        </div>
+
+        <div class="card">
+            <h3>Decorative</h3>
+            <p>Puzzles that look just as good on a shelf as they do in progress.</p>
+        </div>
+
+    </div>
+
+    <div class="section-header">
+        <div>
+            <p class="section-label">FEATURED</p>
+            <h2>Popular puzzles to start with</h2>
+        </div>
+
+        <a th:href="@{/products}">View all products</a>
+    </div>
+
+    <div class="home-product-grid">
+
+        <div class="card home-product-card">
+            <img alt="Puzzle image" th:src="@{/images/product-images/P1001-01.jpg}">
+            <p class="section-label">MECHANICAL</p>
+            <h3>Luminous Globe 3D Wooden Puzzle</h3>
+            <p>Rotating wooden globe with gears and warm LED lighting for display.</p>
+            <div class="home-card-bottom">
+                <strong>$59.99</strong>
+                <span>180 pieces</span>
+            </div>
+        </div>
+
+        <div class="card home-product-card">
+            <img alt="Puzzle image" th:src="@{/images/product-images/P1002-01.jpg}">
+            <p class="section-label">MECHANICAL</p>
+            <h3>Steam Engine Mechanical 3D Wooden Puzzle</h3>
+            <p>Detailed steam engine model with moving pistons and crankshaft parts.</p>
+            <div class="home-card-bottom">
+                <strong>$64.99</strong>
+                <span>320 pieces</span>
+            </div>
+        </div>
+
+        <div class="card home-product-card">
+            <img alt="Puzzle image" th:src="@{/images/product-images/P1003-01.jpg}">
+            <p class="section-label">MECHANICAL</p>
+            <h3>Pendulum Clock Wooden Mechanical Puzzle</h3>
+            <p>Functional wooden clock featuring exposed gears and moving parts.</p>
+            <div class="home-card-bottom">
+                <strong>$54.99</strong>
+                <span>210 pieces</span>
+            </div>
+        </div>
+
+        <div class="card home-product-card">
+            <img alt="Puzzle image" th:src="@{/images/product-images/P1004-01.jpg}">
+            <p class="section-label">MECHANICAL</p>
+            <h3>Skyrail Marble Run</h3>
+            <p>Hand-cranked marble run with continuous motion and looping tracks.</p>
+            <div class="home-card-bottom">
+                <strong>$49.99</strong>
+                <span>290 pieces</span>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="section-label">WHY SHOP HERE</p>
+    <h2>A better puzzle-buying experience</h2>
+
+    <div class="category-grid three-columns">
+        <div class="card">
+            <h3>Craftsmanship First</h3>
+            <p>Warm materials, clean design, and display-friendly builds make each puzzle feel substantial.</p>
+        </div>
+
+        <div class="card">
+            <h3>Clear Difficulty Levels</h3>
+            <p>Browse easy, medium, and hard builds so shoppers can quickly find a good match.</p>
+        </div>
+
+        <div class="card">
+            <h3>Gift-Ready Selection</h3>
+            <p>Wooden puzzles make strong gifts for hobbyists, collectors, students, and makers.</p>
+        </div>
+    </div>
+
+</div>
+
+<section class="bottom-cta">
+    <div>
+        <p class="section-label">START EXPLORING</p>
+        <h2>Ready to find your next build?</h2>
+        <p>Browse the full collection and discover puzzles by category, difficulty, and price.</p>
+    </div>
+
+    <a class="btn" th:href="@{/products}">Shop Now</a>
+</section>
+
+</body>
+</html>

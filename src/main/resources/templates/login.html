@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="auth-page">
+
+    <div class="auth-card sample-auth-card">
+
+        <h1>Login</h1>
+
+        <div class="login-error-message" th:if="${param.error}">
+            Invalid email or password
+        </div>
+
+        <form method="post" th:action="@{/login}">
+
+            <input name="redirect"
+                   th:value="${param.redirect}"
+                   type="hidden">
+
+            <div class="form-row">
+                <label>Email</label>
+                <input name="username"
+                       placeholder="Enter your email"
+                       type="email">
+            </div>
+
+            <div class="form-row">
+                <label>Password</label>
+                <input name="password"
+                       placeholder="Enter your password"
+                       type="password">
+            </div>
+
+            <button class="sample-login-btn" type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <p class="auth-link-row">
+            Don't have an account?
+            <a class="green-link" th:href="@{/register}">Register</a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

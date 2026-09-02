@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="auth-page">
+
+    <div class="auth-card sample-auth-card">
+
+        <h1>Create Account</h1>
+
+        <form method="post"
+              th:action="@{/register}"
+              th:object="${registerDto}">
+
+            <div class="register-error-message"
+                 th:if="${#fields.hasAnyErrors()}">
+
+                <p th:errors="*{firstName}"
+                   th:if="${#fields.hasErrors('firstName')}"></p>
+
+                <p th:errors="*{lastName}"
+                   th:if="${#fields.hasErrors('lastName')}"></p>
+
+                <p th:errors="*{email}"
+                   th:if="${#fields.hasErrors('email')}"></p>
+
+                <p th:errors="*{password}"
+                   th:if="${#fields.hasErrors('password')}"></p>
+
+                <p th:errors="*{confirmPassword}"
+                   th:if="${#fields.hasErrors('confirmPassword')}"></p>
+
+            </div>
+
+            <div class="form-row">
+                <label>First Name</label>
+                <input placeholder="Enter your first name"
+                       th:field="*{firstName}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Last Name</label>
+                <input placeholder="Enter your last name"
+                       th:field="*{lastName}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Email</label>
+                <input placeholder="Enter your email"
+                       th:field="*{email}"
+                       type="email">
+            </div>
+
+            <div class="form-row">
+                <label>Password</label>
+                <input placeholder="Enter password"
+                       th:field="*{password}"
+                       type="password">
+            </div>
+
+            <div class="form-row">
+                <label>Confirm Password</label>
+                <input placeholder="Confirm password"
+                       th:field="*{confirmPassword}"
+                       type="password">
+            </div>
+
+            <button class="sample-login-btn" type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="auth-link-row">
+            Already have an account?
+            <a class="green-link" th:href="@{/login}">Login</a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

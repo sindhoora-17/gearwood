@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Products</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <div class="admin-header">
+        <div>
+            <h1>Admin Product Management</h1>
+            <p>View, edit, activate, and deactivate store products.</p>
+        </div>
+
+        <a class="btn" th:href="@{/admin/products/create}">Create New Product</a>
+    </div>
+
+    <div class="card">
+
+        <table>
+            <thead>
+            <tr>
+                <th>Image</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Category</th>
+                <th>Difficulty</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Edit</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td>
+                    <img alt="Product image"
+                         class="admin-product-img"
+                         th:src="@{'/images/product-images/' + ${product.productCode} + '-01.jpg'}">
+                </td>
+
+                <td th:text="${product.productCode}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.manufacturer.name}"></td>
+                <td th:text="${product.category}"></td>
+                <td th:text="${product.difficulty}"></td>
+                <td th:text="'$' + ${product.price}"></td>
+
+                <td>
+                    <span class="status-active" th:if="${product.active}">Active</span>
+                    <span class="status-inactive" th:if="${!product.active}">Inactive</span>
+                </td>
+
+                <td>
+                    <a th:href="@{'/admin/products/edit/' + ${product.productCode}}">
+                        Edit
+                    </a>
+                </td>
+
+                <td>
+                    <form method="post"
+                          th:action="@{'/admin/products/toggle/' + ${product.productCode}}">
+
+                        <button class="danger-btn" th:if="${product.active}" type="submit">
+                            Deactivate
+                        </button>
+
+                        <button th:if="${!product.active}" type="submit">
+                            Activate
+                        </button>
+
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

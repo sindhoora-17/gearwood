@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <a class="back-link" th:href="@{/account}">← Back to Account</a>
+
+    <h1>Order Details</h1>
+
+    <div class="account-grid">
+
+        <div class="card">
+            <h2>Order Information</h2>
+
+            <p><strong>Order #:</strong> <span th:text="${order.orderNumber}"></span></p>
+            <p><strong>Date:</strong> <span th:text="${order.orderDateTime.toLocalDate()}"></span></p>
+            <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+            <p><strong>Transaction ID:</strong> <span th:text="${order.transactionId}"></span></p>
+            <p><strong>Total:</strong> <span th:text="'$' + ${order.totalAmount}"></span></p>
+        </div>
+
+        <div class="card">
+            <h2>Shipping Information</h2>
+
+            <p th:text="${order.shippingName}"></p>
+            <p th:text="${order.streetAddress}"></p>
+
+            <p th:if="${order.address2 != null && !order.address2.isEmpty()}"
+               th:text="${order.address2}">
+            </p>
+
+            <p>
+                <span th:text="${order.city}"></span>,
+                <span th:text="${order.state}"></span>
+                <span th:text="${order.zip}"></span>
+            </p>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Items</h2>
+
+        <div class="order-item-row" th:each="item : ${order.orderItems}">
+
+            <img th:src="@{'/images/product-images/' + ${item.product.productCode} + '-01.jpg'}"
+                 onerror="this.onerror=null; this.src='/images/product-images/default.jpg';"
+                 alt="Product image">
+
+            <div>
+                <h3 th:text="${item.productNameAtPurchase}"></h3>
+                <p th:text="'Quantity: ' + ${item.quantity}"></p>
+                <p th:text="'Unit Price: $' + ${item.unitPriceAtPurchase}"></p>
+            </div>
+
+            <strong th:text="'$' + ${item.lineTotal}"></strong>
+
+        </div>
+
+        <hr>
+
+        <div class="order-totals">
+            <p th:text="'Subtotal: $' + ${order.subtotal}"></p>
+            <p th:text="'Tax: $' + ${order.taxAmount}"></p>
+            <p th:text="'Shipping: $' + ${order.shippingAmount}"></p>
+            <h3 th:text="'Total: $' + ${order.totalAmount}"></h3>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

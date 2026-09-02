@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <a class="back-link" th:href="@{/products}">← Back to Products</a>
+
+    <div class="product-details card">
+
+        <div class="product-images">
+
+            <div class="main-image">
+                <img id="mainImage"
+                     th:src="@{'/images/product-images/' + ${product.productCode} + '-01.jpg'}"
+                     onerror="this.onerror=null; this.src='/images/product-images/default.jpg';"
+                     alt="Product image">
+            </div>
+
+            <div class="thumbnail-row">
+
+                <img onclick="changeImage(this.src)"
+                     th:each="imageNumber : ${imageNumbers}"
+                     th:src="@{'/images/product-images/' + ${product.productCode} + '-' + ${#numbers.formatInteger(imageNumber, 2)} + '.jpg'}">
+
+            </div>
+
+        </div>
+
+        <div class="product-info">
+
+            <h1 th:text="${product.name}"></h1>
+
+            <p class="product-tagline"
+               th:text="${product.shortDescription}">
+            </p>
+
+            <p><strong>Price:</strong> <span th:text="'$' + ${product.price}"></span></p>
+            <p><strong>Manufacturer:</strong> <span th:text="${product.manufacturer.name}"></span></p>
+            <p><strong>Pieces:</strong> <span th:text="${product.numberOfPieces}"></span></p>
+            <p><strong>Difficulty:</strong> <span th:text="${product.difficulty}"></span></p>
+            <p><strong>Category:</strong> <span th:text="${product.category}"></span></p>
+
+            <div sec:authorize="hasRole('ADMIN')" style="margin:15px 0;">
+
+                <a class="btn admin-action-btn"
+                   th:href="@{'/admin/products/edit/' + ${product.productCode}}">
+                    Edit Product
+                </a>
+
+                <form method="post"
+                      style="display:inline; margin-left:10px;"
+                      th:action="@{'/admin/products/toggle/' + ${product.productCode}}">
+
+                    <button class="admin-action-btn danger-btn"
+                            th:if="${product.active}"
+                            type="submit">
+                        Deactivate Product
+                    </button>
+
+                    <button class="admin-action-btn"
+                            th:if="${!product.active}"
+                            type="submit">
+                        Activate Product
+                    </button>
+
+                </form>
+
+                <form method="post"
+                      style="display:inline; margin-left:10px;"
+                      th:action="@{'/admin/products/delete/' + ${product.productCode}}">
+
+                    <button class="admin-action-btn danger-btn"
+                            onclick="return confirm('Are you sure you want to delete this product? If it is linked to carts or orders, it will be deactivated instead.');"
+                            type="submit">
+                        Delete Product
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="detail-panel" sec:authorize="isAuthenticated()">
+
+                <h3>Add to Cart</h3>
+
+                <form method="post"
+                      th:action="@{'/cart/add/' + ${product.productCode}}">
+
+                    <label>Quantity:</label>
+
+                    <input min="1"
+                           name="quantity"
+                           style="width:70px;"
+                           type="number"
+                           value="1">
+
+                    <button type="submit">Add To Cart</button>
+
+                </form>
+
+            </div>
+
+            <div class="detail-panel" sec:authorize="isAnonymous()">
+
+                <h3>Add to Cart</h3>
+
+                <div class="anonymous-cart-row">
+
+                    <div>
+                        <p>Please log in to add this item to your cart.</p>
+
+                        <label><strong>Quantity:</strong></label>
+
+                        <input min="1"
+                               style="width:70px;"
+                               type="number"
+                               value="1">
+                    </div>
+
+                    <a class="btn"
+                       th:href="@{/login(redirect=${'/products/' + product.productCode})}">
+                        Login to Add
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="detail-panel">
+
+                <h3>Details</h3>
+
+                <p th:text="${product.longDescription}"></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function changeImage(imageSrc) {
+        document.getElementById("mainImage").src = imageSrc;
+    }
+</script>
+
+</body>
+</html>

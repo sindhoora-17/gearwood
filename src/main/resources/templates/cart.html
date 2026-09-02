@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Cart</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <h1>Your Cart</h1>
+
+    <div class="error-banner" th:if="${hasInactiveItems}">
+        <p>One or more items in your cart are no longer available. Please remove them before checkout.</p>
+    </div>
+
+    <div class="card" th:if="${cartItems.isEmpty()}">
+        <p>Your cart is empty.</p>
+        <a class="btn" th:href="@{/products}">Continue Shopping</a>
+    </div>
+
+    <div class="cart-layout" th:if="${!cartItems.isEmpty()}">
+
+        <div>
+
+            <div class="card cart-item-card" th:each="item : ${cartItems}">
+
+                <img th:src="@{'/images/product-images/' + ${item.product.productCode} + '-01.jpg'}"
+                     onerror="this.onerror=null; this.src='/images/product-images/default.jpg';"
+                     alt="Product image">
+
+                <div class="cart-item-info">
+
+                    <h2 th:text="${item.product.name}"></h2>
+
+                    <p class="error" th:if="${!item.product.active}">
+                        This product is no longer available.
+                    </p>
+
+                    <p><strong>Product Code:</strong> <span th:text="${item.product.productCode}"></span></p>
+                    <p><strong>Category:</strong> <span th:text="${item.product.category}"></span></p>
+                    <p><strong>Difficulty:</strong> <span th:text="${item.product.difficulty}"></span></p>
+                    <p><strong>Unit Price:</strong> <span th:text="'$' + ${item.unitPrice}"></span></p>
+                    <p>
+                        <strong>Line Total:</strong>
+                        <span class="line-total" th:text="'$' + ${item.lineTotal}"></span>
+                    </p>
+
+                    <div class="cart-button-row">
+
+                        <form class="cart-actions"
+                              method="post"
+                              th:action="@{'/cart/update/' + ${item.id}}">
+
+                            <label><strong>Quantity</strong></label>
+
+                            <input min="0"
+                                   name="quantity"
+                                   style="width:60px;"
+                                   th:value="${item.quantity}"
+                                   type="number">
+
+                            <button type="submit">Update</button>
+
+                        </form>
+
+                        <form class="cart-actions"
+                              method="post"
+                              th:action="@{'/cart/remove/' + ${item.id}}">
+
+                            <button class="danger-btn" type="submit">Remove</button>
+
+                        </form>
+
+                    </div>
+
+                    <div class="cart-view-product-row">
+                        <a th:href="@{'/products/' + ${item.product.productCode}}"
+                           th:if="${item.product.active}">
+                            View Product
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="summary">
+
+            <h2>Order Summary</h2>
+
+            <h4>Items</h4>
+
+            <div class="summary-item" th:each="item : ${cartItems}">
+
+                <div>
+                    <span th:text="${item.product.name}"></span>
+                    <br>
+                    <small th:text="'(' + ${item.quantity} + ')'"></small>
+                </div>
+
+                <strong th:text="'$' + ${item.lineTotal}"></strong>
+
+            </div>
+
+            <hr>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span th:text="'$' + ${subtotal}"></span>
+            </div>
+
+            <div class="summary-row">
+                <span>Estimated Shipping</span>
+
+                <span th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) == 0}">
+          FREE
+        </span>
+
+                <span th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) > 0}"
+                      th:text="'$' + ${shipping}">
+        </span>
+            </div>
+
+            <div th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) == 0}">
+                <p class="shipping-note success-note">
+                    ✓ You qualify for FREE shipping.
+                </p>
+            </div>
+
+            <div th:if="${shipping.compareTo(T(java.math.BigDecimal).ZERO) > 0}">
+                <p class="shipping-note">
+                    Free shipping on orders of $75.00 or more.
+                </p>
+            </div>
+
+            <div class="summary-row">
+                <span>Estimated Tax</span>
+                <span th:text="'$' + ${tax}"></span>
+            </div>
+
+            <hr>
+
+            <div class="summary-total">
+                <span>Estimated Total</span>
+                <span th:text="'$' + ${total}"></span>
+            </div>
+
+            <hr>
+
+            <a class="continue-shopping"
+               th:href="@{/products}">
+                Continue Shopping
+            </a>
+
+            <a class="checkout-btn"
+               th:href="@{/checkout}"
+               th:if="${!hasInactiveItems}">
+                Proceed to Checkout
+            </a>
+
+            <span class="checkout-btn disabled-btn"
+                  th:if="${hasInactiveItems}">
+        Proceed to Checkout
+      </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

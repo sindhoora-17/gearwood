@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Profile</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="auth-page">
+
+    <div class="auth-card sample-auth-card">
+
+        <a class="back-link" th:href="@{/account}">
+            ← Back to Account
+        </a>
+
+        <h1>Edit Profile</h1>
+
+        <form method="post" th:action="@{/account/edit}">
+
+            <div class="form-row">
+                <label>First Name</label>
+                <input name="firstName"
+                       th:value="${user.firstName}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Last Name</label>
+                <input name="lastName"
+                       th:value="${user.lastName}"
+                       type="text">
+            </div>
+
+            <div class="form-row">
+                <label>Email</label>
+                <input disabled
+                       th:value="${user.email}"
+                       type="email">
+            </div>
+
+            <div class="form-action-row">
+
+                <button class="sample-login-btn" type="submit">
+                    Save Changes
+                </button>
+
+                <a class="green-link"
+                   th:href="@{/account}">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

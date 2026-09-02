@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout Success</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="page-container">
+
+    <div class="card success-card">
+
+        <h1>Thank you for your order!</h1>
+
+        <p>Your order has been placed successfully.</p>
+
+        <p>
+            <strong>Order Number:</strong>
+            <span th:text="${orderNumber}"></span>
+        </p>
+
+        <a class="btn" th:href="@{/products}">Continue Shopping</a>
+
+        <a class="btn" th:href="@{/account}">My Account</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
