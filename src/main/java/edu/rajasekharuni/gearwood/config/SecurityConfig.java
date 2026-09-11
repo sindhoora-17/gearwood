@@ -58,7 +58,7 @@ public class SecurityConfig {
                         .successHandler((request, response, authentication) -> {
                             String redirect = request.getParameter("redirect");
 
-                            if (redirect != null && !redirect.isBlank()) {
+                            if (isSafeLocalRedirect(redirect)) {
                                 response.sendRedirect(redirect);
                             } else {
                                 response.sendRedirect("/");
@@ -75,5 +75,12 @@ public class SecurityConfig {
                 .userDetailsService(customUserDetailsService);
 
         return http.build();
+    }
+
+    private boolean isSafeLocalRedirect(String redirect) {
+        return redirect != null
+                && !redirect.isBlank()
+                && redirect.startsWith("/")
+                && !redirect.startsWith("//");
     }
 }
