@@ -9,6 +9,8 @@ import edu.rajasekharuni.gearwood.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -51,14 +53,15 @@ public class CartService {
         return getCartItems(email).stream().map(CartItem::getLineTotal).reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, java.math.RoundingMode.HALF_UP);
     }
 
-    public void removeItem(Long cartItemId) {
+    public void removeItem(String email, Long cartItemId) {
 
-        cartItemRepository.deleteById(cartItemId);
+        CartItem item = findOwnedItem(email, cartItemId);
+        cartItemRepository.delete(item);
     }
 
-    public void updateQuantity(Long cartItemId, Integer quantity) {
+    public void updateQuantity(String email, Long cartItemId, Integer quantity) {
 
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow();
+        CartItem cartItem = findOwnedItem(email, cartItemId);
 
         if (quantity <= 0) {
             cartItemRepository.delete(cartItem);
@@ -66,6 +69,13 @@ public class CartService {
             cartItem.setQuantity(quantity);
             cartItemRepository.save(cartItem);
         }
+    }
+
+    private CartItem findOwnedItem(String email, Long id) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return cartItemRepository.findByIdAndUser(id, user)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public BigDecimal getShipping(String email) {
