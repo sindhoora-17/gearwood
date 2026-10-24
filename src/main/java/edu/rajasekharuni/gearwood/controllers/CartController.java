@@ -46,17 +46,17 @@ public class CartController {
     }
 
     @PostMapping("/cart/remove/{id}")
-    public String removeItem(@PathVariable Long id) {
+    public String removeItem(@PathVariable Long id, Authentication authentication) {
 
-        cartService.removeItem(id);
+        cartService.removeItem(authentication.getName(), id);
 
         return "redirect:/cart";
     }
 
     @PostMapping("/cart/update/{id}")
-    public String updateQuantity(@PathVariable Long id, @RequestParam Integer quantity) {
+    public String updateQuantity(@PathVariable Long id, @RequestParam Integer quantity, Authentication authentication) {
 
-        cartService.updateQuantity(id, quantity);
+        cartService.updateQuantity(authentication.getName(), id, quantity);
 
         return "redirect:/cart";
     }
